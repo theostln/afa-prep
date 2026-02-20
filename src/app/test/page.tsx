@@ -1,8 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { generateTestSeries, Question } from '@/data/questions';
+
+const EXAM_DURATION = 30 * 60; // 30 minutes in seconds
+const PASS_THRESHOLD = 60; // 60% to pass
 
 export default function TestPage() {
   const router = useRouter();
@@ -10,7 +13,7 @@ export default function TestPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<boolean[][]>([]);
   const [startTime, setStartTime] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
+  const [remaining, setRemaining] = useState(EXAM_DURATION);
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState<any>(null);
 
@@ -26,10 +29,17 @@ export default function TestPage() {
     setStartTime(Date.now());
   }, [router]);
 
+  const submitRef = useRef<(() => void) | null>(null);
+
   useEffect(() => {
     if (submitted || !startTime) return;
     const interval = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - startTime) / 1000));
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const left = Math.max(0, EXAM_DURATION - elapsed);
+      setRemaining(left);
+      if (left <= 0 && submitRef.current) {
+        submitRef.current();
+      }
     }, 1000);
     return () => clearInterval(interval);
   }, [startTime, submitted]);
@@ -56,8 +66,8 @@ export default function TestPage() {
     });
   };
 
-  const handleSubmit = () => {
-    if (!confirm('Êtes-vous sûr de vouloir soumettre ce test ?')) return;
+  const doSubmit = (autoSubmit = false) => {
+    if (!autoSubmit && !confirm('Êtes-vous sûr de vouloir soumettre ce test ?')) return;
 
     let correctCount = 0;
     const themeBreakdown: Record<string, { correct: number; total: number }> = {};
@@ -76,13 +86,17 @@ export default function TestPage() {
     });
 
     const score = Math.round((correctCount / questions.length) * 100);
+    const duration = Math.floor((Date.now() - startTime) / 1000);
+    const passed = score >= PASS_THRESHOLD;
     const result = {
       id: `test_${Date.now()}`,
       date: new Date().toISOString(),
       totalQuestions: questions.length,
       correctAnswers: correctCount,
       score,
-      duration: elapsed,
+      passed,
+      duration,
+      timeExpired: autoSubmit,
       themeBreakdown,
       details
     };
@@ -95,6 +109,11 @@ export default function TestPage() {
     setResults(result);
     setSubmitted(true);
   };
+
+  // Keep ref in sync for auto-submit on timeout
+  useEffect(() => {
+    submitRef.current = () => doSubmit(true);
+  });
 
   if (questions.length === 0) {
     return (
@@ -115,21 +134,28 @@ export default function TestPage() {
         <div className="max-w-4xl mx-auto">
           {/* Score Card */}
           <div className={`rounded-2xl p-8 mb-8 text-center ${
-            results.score >= 80 ? 'bg-green-900/30 border border-green-500/30' :
-            results.score >= 60 ? 'bg-yellow-900/30 border border-yellow-500/30' :
-            'bg-red-900/30 border border-red-500/30'
+            results.passed ? 'bg-green-900/30 border border-green-500/30' : 'bg-red-900/30 border border-red-500/30'
           }`}>
+            <div className={`text-lg font-bold mb-2 px-4 py-1 rounded-full inline-block ${
+              results.passed ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+            }`}>
+              {results.passed ? 'EXAMEN RÉUSSI' : 'EXAMEN ÉCHOUÉ'}
+            </div>
             <div className={`text-7xl font-bold mb-2 ${
-              results.score >= 80 ? 'text-green-400' : results.score >= 60 ? 'text-yellow-400' : 'text-red-400'
+              results.passed ? 'text-green-400' : 'text-red-400'
             }`}>
               {results.score}%
             </div>
             <div className="text-white text-xl mb-1">
               {results.correctAnswers}/{results.totalQuestions} réponses correctes
             </div>
-            <div className="text-white/60">Durée: {formatTime(results.duration)}</div>
+            <div className="text-white/60">Durée: {formatTime(results.duration)} / 30:00</div>
+            <div className="text-white/50 text-sm mt-1">Seuil de réussite : {PASS_THRESHOLD}%</div>
+            {results.timeExpired && (
+              <div className="text-red-400 text-sm mt-2 font-medium">Temps écoulé - soumission automatique</div>
+            )}
             <div className="text-white/60 mt-2">
-              {results.score >= 80 ? 'Excellent !' : results.score >= 60 ? 'Bon travail !' : 'Continuez vos efforts !'}
+              {results.score >= 80 ? 'Excellent !' : results.passed ? 'Bon travail !' : 'Continuez vos efforts !'}
             </div>
           </div>
 
@@ -211,8 +237,10 @@ export default function TestPage() {
       <div className="max-w-4xl mx-auto mb-6 flex justify-between items-center bg-white/5 rounded-xl p-4 border border-white/10">
         <div className="flex items-center gap-6">
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-400">{formatTime(elapsed)}</div>
-            <p className="text-xs text-white/50">Temps</p>
+            <div className={`text-2xl font-bold ${remaining <= 300 ? 'text-red-400 animate-pulse' : remaining <= 600 ? 'text-yellow-400' : 'text-blue-400'}`}>
+              {formatTime(remaining)}
+            </div>
+            <p className="text-xs text-white/50">Temps restant</p>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-green-400">{currentIndex + 1}/{questions.length}</div>
@@ -312,7 +340,7 @@ export default function TestPage() {
 
           {currentIndex === questions.length - 1 ? (
             <button
-              onClick={handleSubmit}
+              onClick={() => doSubmit(false)}
               disabled={answeredCount < questions.length}
               className="px-8 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-30 font-bold"
             >
