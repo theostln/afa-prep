@@ -77,9 +77,11 @@ export default function TestPage() {
       const userSelected = userAnswers[qi];
       const numOptions = q.answers.length;
       const pointsPerOption = q.points / numOptions;
+      const hasDeduction = q.instruction.includes('points sont déduits');
 
       // Each correctly handled option earns points
       // Correct = checked if should be checked, unchecked if shouldn't
+      // With deduction: wrong option = -pointsPerOption instead of 0
       let questionEarned = 0;
       let correctOptions = 0;
       q.answers.forEach((a, ai) => {
@@ -87,8 +89,12 @@ export default function TestPage() {
         if (isOptionCorrect) {
           questionEarned += pointsPerOption;
           correctOptions++;
+        } else if (hasDeduction) {
+          questionEarned -= pointsPerOption;
         }
       });
+      // Never go below 0
+      questionEarned = Math.max(0, questionEarned);
 
       const isFullyCorrect = correctOptions === numOptions;
       totalPoints += q.points;
@@ -106,7 +112,8 @@ export default function TestPage() {
         earnedPoints: Math.round(questionEarned * 100) / 100,
         maxPoints: q.points,
         correctOptions,
-        totalOptions: numOptions
+        totalOptions: numOptions,
+        hasDeduction
       };
     });
 
@@ -221,12 +228,17 @@ export default function TestPage() {
                 }`}>
                   <div className="flex justify-between items-start mb-2">
                     <p className="text-white font-medium text-sm flex-1 mr-2">Q{i+1}. {d.question.question.substring(0, 100)}...</p>
-                    <span className={`px-2 py-1 rounded text-xs font-bold whitespace-nowrap ${
-                      d.isCorrect ? 'bg-green-500/20 text-green-400' :
-                      pctQ >= 50 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'
-                    }`}>
-                      {d.earnedPoints}/{d.maxPoints} pts
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {d.hasDeduction && (
+                        <span className="px-1.5 py-0.5 rounded text-[10px] bg-orange-500/20 text-orange-400">Déduction</span>
+                      )}
+                      <span className={`px-2 py-1 rounded text-xs font-bold whitespace-nowrap ${
+                        d.isCorrect ? 'bg-green-500/20 text-green-400' :
+                        pctQ >= 50 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'
+                      }`}>
+                        {d.earnedPoints}/{d.maxPoints} pts
+                      </span>
+                    </div>
                   </div>
                   {!d.isCorrect && (
                     <div className="mt-2 space-y-1">
