@@ -69,30 +69,56 @@ export default function TestPage() {
   const doSubmit = (autoSubmit = false) => {
     if (!autoSubmit && !confirm('Êtes-vous sûr de vouloir soumettre ce test ?')) return;
 
-    let correctCount = 0;
-    const themeBreakdown: Record<string, { correct: number; total: number }> = {};
+    let totalPoints = 0;
+    let earnedPoints = 0;
+    const themeBreakdown: Record<string, { earned: number; total: number }> = {};
 
     const details = questions.map((q, qi) => {
       const userSelected = userAnswers[qi];
-      const isCorrect = q.answers.every((a, ai) => a.correct === userSelected[ai]);
-      if (isCorrect) correctCount++;
+      const numOptions = q.answers.length;
+      const pointsPerOption = q.points / numOptions;
+
+      // Each correctly handled option earns points
+      // Correct = checked if should be checked, unchecked if shouldn't
+      let questionEarned = 0;
+      let correctOptions = 0;
+      q.answers.forEach((a, ai) => {
+        const isOptionCorrect = a.correct === userSelected[ai];
+        if (isOptionCorrect) {
+          questionEarned += pointsPerOption;
+          correctOptions++;
+        }
+      });
+
+      const isFullyCorrect = correctOptions === numOptions;
+      totalPoints += q.points;
+      earnedPoints += questionEarned;
 
       const theme = q.theme.split(',')[0].trim();
-      if (!themeBreakdown[theme]) themeBreakdown[theme] = { correct: 0, total: 0 };
-      themeBreakdown[theme].total++;
-      if (isCorrect) themeBreakdown[theme].correct++;
+      if (!themeBreakdown[theme]) themeBreakdown[theme] = { earned: 0, total: 0 };
+      themeBreakdown[theme].total += q.points;
+      themeBreakdown[theme].earned += questionEarned;
 
-      return { question: q, userSelected, isCorrect };
+      return {
+        question: q,
+        userSelected,
+        isCorrect: isFullyCorrect,
+        earnedPoints: Math.round(questionEarned * 100) / 100,
+        maxPoints: q.points,
+        correctOptions,
+        totalOptions: numOptions
+      };
     });
 
-    const score = Math.round((correctCount / questions.length) * 100);
+    const score = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
     const duration = Math.floor((Date.now() - startTime) / 1000);
     const passed = score >= PASS_THRESHOLD;
     const result = {
       id: `test_${Date.now()}`,
       date: new Date().toISOString(),
       totalQuestions: questions.length,
-      correctAnswers: correctCount,
+      totalPoints: Math.round(totalPoints * 100) / 100,
+      earnedPoints: Math.round(earnedPoints * 100) / 100,
       score,
       passed,
       duration,
@@ -147,7 +173,7 @@ export default function TestPage() {
               {results.score}%
             </div>
             <div className="text-white text-xl mb-1">
-              {results.correctAnswers}/{results.totalQuestions} réponses correctes
+              {results.earnedPoints} / {results.totalPoints} points
             </div>
             <div className="text-white/60">Durée: {formatTime(results.duration)} / 30:00</div>
             <div className="text-white/50 text-sm mt-1">Seuil de réussite : {PASS_THRESHOLD}%</div>
@@ -164,7 +190,9 @@ export default function TestPage() {
             <h3 className="text-xl font-bold text-white mb-4">Résultats par thème</h3>
             <div className="space-y-3">
               {Object.entries(results.themeBreakdown).map(([theme, data]: [string, any]) => {
-                const pct = Math.round((data.correct / data.total) * 100);
+                const pct = data.total > 0 ? Math.round((data.earned / data.total) * 100) : 0;
+                const earned = Math.round(data.earned * 100) / 100;
+                const total = Math.round(data.total * 100) / 100;
                 return (
                   <div key={theme} className="flex items-center gap-4">
                     <span className="w-24 text-sm text-white/70 truncate">{theme}</span>
@@ -173,7 +201,7 @@ export default function TestPage() {
                         pct >= 80 ? 'bg-green-500' : pct >= 60 ? 'bg-yellow-500' : 'bg-red-500'
                       }`} style={{ width: `${pct}%` }} />
                     </div>
-                    <span className="text-sm text-white/70 w-20 text-right">{data.correct}/{data.total} ({pct}%)</span>
+                    <span className="text-sm text-white/70 w-24 text-right">{earned}/{total} pts ({pct}%)</span>
                   </div>
                 );
               })}
@@ -184,32 +212,44 @@ export default function TestPage() {
           <div className="bg-white/5 rounded-xl p-6 mb-8 border border-white/10">
             <h3 className="text-xl font-bold text-white mb-4">Détail des réponses</h3>
             <div className="space-y-4">
-              {results.details.map((d: any, i: number) => (
+              {results.details.map((d: any, i: number) => {
+                const pctQ = d.maxPoints > 0 ? Math.round((d.earnedPoints / d.maxPoints) * 100) : 0;
+                return (
                 <div key={i} className={`rounded-lg p-4 border-l-4 ${
-                  d.isCorrect ? 'border-green-500 bg-green-900/10' : 'border-red-500 bg-red-900/10'
+                  d.isCorrect ? 'border-green-500 bg-green-900/10' :
+                  pctQ >= 50 ? 'border-yellow-500 bg-yellow-900/10' : 'border-red-500 bg-red-900/10'
                 }`}>
                   <div className="flex justify-between items-start mb-2">
-                    <p className="text-white font-medium text-sm">Q{i+1}. {d.question.question.substring(0, 100)}...</p>
-                    <span className={`px-2 py-1 rounded text-xs font-bold ${
-                      d.isCorrect ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                    <p className="text-white font-medium text-sm flex-1 mr-2">Q{i+1}. {d.question.question.substring(0, 100)}...</p>
+                    <span className={`px-2 py-1 rounded text-xs font-bold whitespace-nowrap ${
+                      d.isCorrect ? 'bg-green-500/20 text-green-400' :
+                      pctQ >= 50 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'
                     }`}>
-                      {d.isCorrect ? 'Correct' : 'Incorrect'}
+                      {d.earnedPoints}/{d.maxPoints} pts
                     </span>
                   </div>
                   {!d.isCorrect && (
                     <div className="mt-2 space-y-1">
-                      {d.question.answers.map((a: any, ai: number) => (
-                        <div key={ai} className={`text-xs px-2 py-1 rounded ${
-                          a.correct ? 'text-green-400 bg-green-900/20' :
-                          d.userSelected[ai] ? 'text-red-400 bg-red-900/20' : 'text-white/40'
+                      {d.question.answers.map((a: any, ai: number) => {
+                        const optionCorrect = a.correct === d.userSelected[ai];
+                        return (
+                        <div key={ai} className={`text-xs px-2 py-1 rounded flex items-center gap-2 ${
+                          optionCorrect ? 'text-green-400 bg-green-900/20' : 'text-red-400 bg-red-900/20'
                         }`}>
-                          {a.correct ? '✓' : d.userSelected[ai] ? '✗' : '○'} {a.text}
+                          <span>{optionCorrect ? '✓' : '✗'}</span>
+                          <span className="flex-1">{a.text}</span>
+                          <span className="text-white/40">
+                            {d.userSelected[ai] ? '(coché)' : '(non coché)'}
+                            {' '}{a.correct ? '— à cocher' : '— à ne pas cocher'}
+                          </span>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
