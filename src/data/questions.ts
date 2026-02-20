@@ -92,65 +92,247 @@ export const questions: Question[] = [
     complexity: "Simple"
   },
   {
-    id: "277",
+    id: "277a",
     version: "0004",
     theme: "IA, classification, personne-chose-patrimoine",
-    question: "Les assurances peuvent être classées selon différents critères. Décidez s'il s'agit d'une assurance de choses, d'une assurance de personnes ou d'une assurance de patrimoine.",
-    instruction: "Cochez les bonnes réponses. Des points sont déduits en cas de fausses réponses!",
+    question: "Comment classez-vous l'assurance inventaire du ménage ?",
+    instruction: "Cochez la bonne réponse.",
     answers: [
-      { text: "Assurance inventaire du ménage → Assurance de choses", correct: true },
-      { text: "Assurance incendie → Assurance de choses", correct: true },
-      { text: "Assurance responsabilité civile → Assurance de patrimoine", correct: true },
-      { text: "Assurance perte d'exploitation → Assurance de patrimoine", correct: true },
-      { text: "Assurance-maladie → Assurance de personnes", correct: true },
-      { text: "Assurance invalidité → Assurance de personnes", correct: true }
+      { text: "Assurance de choses", correct: true },
+      { text: "Assurance de personnes", correct: false },
+      { text: "Assurance de patrimoine", correct: false }
     ],
-    points: 2,
-    complexity: "Moyenne"
+    points: 1,
+    complexity: "Simple"
   },
   {
-    id: "329",
+    id: "277b",
+    version: "0004",
+    theme: "IA, classification, personne-chose-patrimoine",
+    question: "Comment classez-vous l'assurance incendie ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Assurance de choses", correct: true },
+      { text: "Assurance de personnes", correct: false },
+      { text: "Assurance de patrimoine", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "277c",
+    version: "0004",
+    theme: "IA, classification, personne-chose-patrimoine",
+    question: "Comment classez-vous l'assurance responsabilité civile ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Assurance de choses", correct: false },
+      { text: "Assurance de personnes", correct: false },
+      { text: "Assurance de patrimoine", correct: true }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "277d",
+    version: "0004",
+    theme: "IA, classification, personne-chose-patrimoine",
+    question: "Comment classez-vous l'assurance perte d'exploitation ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Assurance de choses", correct: false },
+      { text: "Assurance de personnes", correct: false },
+      { text: "Assurance de patrimoine", correct: true }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "277e",
+    version: "0004",
+    theme: "IA, classification, personne-chose-patrimoine",
+    question: "Comment classez-vous l'assurance-maladie ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Assurance de choses", correct: false },
+      { text: "Assurance de personnes", correct: true },
+      { text: "Assurance de patrimoine", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "277f",
+    version: "0004",
+    theme: "IA, classification, personne-chose-patrimoine",
+    question: "Comment classez-vous l'assurance invalidité ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Assurance de choses", correct: false },
+      { text: "Assurance de personnes", correct: true },
+      { text: "Assurance de patrimoine", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "329a",
     version: "0004",
     theme: "IA, processus de création de valeur, distinction",
-    question: "La chaîne de valeur d'un assureur peut être divisée en processus de management, commerciaux et de soutien. Quelles activités appartiennent à quel processus?",
-    instruction: "Cochez les bonnes réponses. Des points sont déduits en cas de fausses réponses!",
+    question: "La chaîne de valeur d'un assureur peut être divisée en processus de management, commerciaux et de soutien. À quel processus appartient la « Gestion des produits » ?",
+    instruction: "Cochez la bonne réponse.",
     answers: [
-      { text: "Gestion des produits → Processus commercial", correct: true },
-      { text: "Administration des contrats et service → Processus commercial", correct: true },
-      { text: "Informatique → Processus de soutien", correct: true },
-      { text: "Souscription → Processus commercial", correct: true },
-      { text: "Planification et contrôle → Processus de management", correct: true },
-      { text: "Gestion du personnel → Processus de soutien", correct: true }
+      { text: "Processus commercial", correct: true },
+      { text: "Processus de management", correct: false },
+      { text: "Processus de soutien", correct: false }
     ],
-    points: 2,
-    complexity: "Moyenne"
+    points: 1,
+    complexity: "Simple"
   },
   {
-    id: "315",
+    id: "329b",
+    version: "0004",
+    theme: "IA, processus de création de valeur, distinction",
+    question: "À quel processus de la chaîne de valeur d'un assureur appartient l'« Administration des contrats et service » ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Processus commercial", correct: true },
+      { text: "Processus de management", correct: false },
+      { text: "Processus de soutien", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "329c",
+    version: "0004",
+    theme: "IA, processus de création de valeur, distinction",
+    question: "À quel processus de la chaîne de valeur d'un assureur appartient l'« Informatique » ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Processus commercial", correct: false },
+      { text: "Processus de management", correct: false },
+      { text: "Processus de soutien", correct: true }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "329d",
+    version: "0004",
+    theme: "IA, processus de création de valeur, distinction",
+    question: "À quel processus de la chaîne de valeur d'un assureur appartient la « Souscription » ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Processus commercial", correct: true },
+      { text: "Processus de management", correct: false },
+      { text: "Processus de soutien", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "329e",
+    version: "0004",
+    theme: "IA, processus de création de valeur, distinction",
+    question: "À quel processus de la chaîne de valeur d'un assureur appartient la « Planification et contrôle » ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Processus commercial", correct: false },
+      { text: "Processus de management", correct: true },
+      { text: "Processus de soutien", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "329f",
+    version: "0004",
+    theme: "IA, processus de création de valeur, distinction",
+    question: "À quel processus de la chaîne de valeur d'un assureur appartient la « Gestion du personnel » ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Processus commercial", correct: false },
+      { text: "Processus de management", correct: false },
+      { text: "Processus de soutien", correct: true }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "315a",
     version: "0004",
     theme: "IA, gestion des risques, mesures de sécurité",
-    question: "Dans le cadre du processus de gestion des risques, il existe différentes façons de gérer les risques. Attribuez les décisions correctement.",
-    instruction: "Cochez les bonnes réponses. Des points sont déduits en cas de fausses réponses!",
+    question: "Gestion des risques : La direction considère que l'expansion à l'étranger est trop risquée et renonce donc à construire une usine de production en Pologne. De quelle mesure s'agit-il ?",
+    instruction: "Cochez la bonne réponse.",
     answers: [
-      { text: "La direction considère que l'expansion à l'étranger est trop risquée et renonce donc à construire une usine de production en Pologne → Éviter les risques", correct: true },
-      { text: "Le propriétaire assure sa maison contre les incendies → Transférer les risques", correct: true },
-      { text: "Un bijoutier décide de réduire la marchandise exposée en vitrine (max CHF 20'000 au lieu de CHF 100'000) → Réduire les risques", correct: true }
+      { text: "Éviter les risques", correct: true },
+      { text: "Transférer les risques", correct: false },
+      { text: "Réduire les risques", correct: false },
+      { text: "Accepter les risques", correct: false }
     ],
-    points: 2,
-    complexity: "Moyenne"
+    points: 1,
+    complexity: "Simple"
   },
   {
-    id: "292",
+    id: "315b",
+    version: "0004",
+    theme: "IA, gestion des risques, mesures de sécurité",
+    question: "Gestion des risques : Le propriétaire assure sa maison contre les incendies. De quelle mesure s'agit-il ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Éviter les risques", correct: false },
+      { text: "Transférer les risques", correct: true },
+      { text: "Réduire les risques", correct: false },
+      { text: "Accepter les risques", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "315c",
+    version: "0004",
+    theme: "IA, gestion des risques, mesures de sécurité",
+    question: "Gestion des risques : Un bijoutier décide de réduire la marchandise exposée en vitrine (max CHF 20'000 au lieu de CHF 100'000). De quelle mesure s'agit-il ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Éviter les risques", correct: false },
+      { text: "Transférer les risques", correct: false },
+      { text: "Réduire les risques", correct: true },
+      { text: "Accepter les risques", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "292a",
     version: "0004",
     theme: "IA, prime, types de primes",
-    question: "Il existe différents types de primes. Attribuez le type de prime correct.",
-    instruction: "Cochez les bonnes réponses.",
+    question: "Quel type de prime les actuaires déterminent-ils sur la base de statistiques et de calculs de probabilité ?",
+    instruction: "Cochez la bonne réponse.",
     answers: [
-      { text: "Prime que les actuaires déterminent sur la base de statistiques et de calculs de probabilité → Prime de risque", correct: true },
-      { text: "Si vous ajoutez les «particularités du client» à la prime brute, vous obtenez la → Prime contractuelle", correct: true }
+      { text: "Prime de risque", correct: true },
+      { text: "Prime contractuelle", correct: false },
+      { text: "Prime brute", correct: false },
+      { text: "Prime nette", correct: false }
     ],
-    points: 2,
-    complexity: "Moyenne"
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "292b",
+    version: "0004",
+    theme: "IA, prime, types de primes",
+    question: "Si vous ajoutez les « particularités du client » à la prime brute, quel type de prime obtenez-vous ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Prime de risque", correct: false },
+      { text: "Prime contractuelle", correct: true },
+      { text: "Prime brute", correct: false },
+      { text: "Prime nette", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
   },
   {
     id: "281",
@@ -168,18 +350,46 @@ export const questions: Question[] = [
     complexity: "Simple"
   },
   {
-    id: "288",
+    id: "288a",
     version: "0004",
     theme: "IA, systèmes de financement, distinction",
-    question: "A quel système de financement les affirmations suivantes correspondent-elles le mieux?",
-    instruction: "Cochez les bonnes réponses. Des points sont déduits en cas de fausses réponses!",
+    question: "À quel système de financement correspond cette caractéristique ? « Force : convient aux risques relativement constants et faciles à estimer »",
+    instruction: "Cochez la bonne réponse.",
     answers: [
-      { text: "Force: convient aux risques relativement constants et faciles à estimer → Système de la couverture des besoins", correct: true },
-      { text: "Force: le droit au capital épargné est garanti → Système de capitalisation", correct: true },
-      { text: "Faiblesse: sensible à la hausse du taux de la rente de vieillesse → Système de répartition", correct: true }
+      { text: "Système de la couverture des besoins", correct: true },
+      { text: "Système de capitalisation", correct: false },
+      { text: "Système de répartition", correct: false }
     ],
-    points: 2,
-    complexity: "Moyenne"
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "288b",
+    version: "0004",
+    theme: "IA, systèmes de financement, distinction",
+    question: "À quel système de financement correspond cette caractéristique ? « Force : le droit au capital épargné est garanti »",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Système de la couverture des besoins", correct: false },
+      { text: "Système de capitalisation", correct: true },
+      { text: "Système de répartition", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "288c",
+    version: "0004",
+    theme: "IA, systèmes de financement, distinction",
+    question: "À quel système de financement correspond cette caractéristique ? « Faiblesse : sensible à la hausse du taux de la rente de vieillesse »",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Système de la couverture des besoins", correct: false },
+      { text: "Système de capitalisation", correct: false },
+      { text: "Système de répartition", correct: true }
+    ],
+    points: 1,
+    complexity: "Simple"
   },
   {
     id: "324",
@@ -242,19 +452,56 @@ export const questions: Question[] = [
     complexity: "Simple"
   },
   {
-    id: "42",
+    id: "42a",
     version: "0007",
     theme: "Droit, LCA, réticence",
-    question: "La société Optique SA a déjà subi deux effractions. L'assureur de l'époque a ensuite résilié la police d'entreprise combinée. Connaissant le problème, la société Optique SA a demandé une couverture d'assurance auprès d'une autre compagnie. Cependant, elle n'a pas mentionné les deux effractions.",
-    instruction: "Cochez les bonnes réponses. Des points sont déduits en cas de fausses réponses!",
+    question: "La société Optique SA a déjà subi deux effractions et n'a pas mentionné ce fait à son nouvel assureur. La compagnie peut-elle résilier la police dans les deux semaines après avoir eu connaissance de la réticence ?",
+    instruction: "Cochez la bonne réponse.",
     answers: [
-      { text: "La compagnie peut résilier la police dans les deux semaines après avoir eu connaissance de la réticence → Faux", correct: true },
-      { text: "La compagnie peut résilier la police dans les quatre semaines après avoir eu connaissance de la réticence → Vrai", correct: true },
-      { text: "L'assureur conserve la prime déjà payée pour la période d'assurance en cours → Faux", correct: true },
-      { text: "Le nouvel assureur peut demander le remboursement de l'indemnité déjà versée pour le dégât d'eau → Faux", correct: true }
+      { text: "Vrai", correct: false },
+      { text: "Faux", correct: true }
     ],
-    points: 2,
-    complexity: "Moyenne"
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "42b",
+    version: "0007",
+    theme: "Droit, LCA, réticence",
+    question: "La société Optique SA a déjà subi deux effractions et n'a pas mentionné ce fait à son nouvel assureur. La compagnie peut-elle résilier la police dans les quatre semaines après avoir eu connaissance de la réticence ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Vrai", correct: true },
+      { text: "Faux", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "42c",
+    version: "0007",
+    theme: "Droit, LCA, réticence",
+    question: "En cas de réticence de la société Optique SA, l'assureur conserve-t-il la prime déjà payée pour la période d'assurance en cours ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Vrai", correct: false },
+      { text: "Faux", correct: true }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "42d",
+    version: "0007",
+    theme: "Droit, LCA, réticence",
+    question: "En cas de réticence, le nouvel assureur peut-il demander le remboursement de l'indemnité déjà versée pour le dégât d'eau ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Vrai", correct: false },
+      { text: "Faux", correct: true }
+    ],
+    points: 1,
+    complexity: "Simple"
   },
   {
     id: "33",
@@ -276,19 +523,60 @@ export const questions: Question[] = [
     complexity: "Moyenne"
   },
   {
-    id: "35",
+    id: "35a",
     version: "0007",
     theme: "Droit, LCA, prestations",
-    question: "Quelle est l'étendue des prestations fournies par l'assureur ?",
-    instruction: "Cochez les bonnes réponses. Des points sont déduits en cas de fausses réponses!",
+    question: "En cas de sinistre causé intentionnellement, quelle est l'étendue des prestations de l'assureur ?",
+    instruction: "Cochez la bonne réponse.",
     answers: [
-      { text: "En cas de sinistre causé intentionnellement → Pas de prestation", correct: true },
-      { text: "En cas de sinistre causé par une faute grave de la personne assurée → Prestation réduite", correct: true },
-      { text: "En cas de sinistre causé par une faute légère → Prestation complète", correct: true },
-      { text: "En cas de sinistre causé par une faute grave du preneur d'assurance → Prestation réduite", correct: true }
+      { text: "Prestation complète", correct: false },
+      { text: "Prestation réduite", correct: false },
+      { text: "Pas de prestation", correct: true }
     ],
-    points: 2,
-    complexity: "Moyenne"
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "35b",
+    version: "0007",
+    theme: "Droit, LCA, prestations",
+    question: "En cas de sinistre causé par une faute grave de la personne assurée, quelle est l'étendue des prestations de l'assureur ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Prestation complète", correct: false },
+      { text: "Prestation réduite", correct: true },
+      { text: "Pas de prestation", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "35c",
+    version: "0007",
+    theme: "Droit, LCA, prestations",
+    question: "En cas de sinistre causé par une faute légère, quelle est l'étendue des prestations de l'assureur ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Prestation complète", correct: true },
+      { text: "Prestation réduite", correct: false },
+      { text: "Pas de prestation", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
+  },
+  {
+    id: "35d",
+    version: "0007",
+    theme: "Droit, LCA, prestations",
+    question: "En cas de sinistre causé par une faute grave du preneur d'assurance, quelle est l'étendue des prestations de l'assureur ?",
+    instruction: "Cochez la bonne réponse.",
+    answers: [
+      { text: "Prestation complète", correct: false },
+      { text: "Prestation réduite", correct: true },
+      { text: "Pas de prestation", correct: false }
+    ],
+    points: 1,
+    complexity: "Simple"
   },
   {
     id: "91",
